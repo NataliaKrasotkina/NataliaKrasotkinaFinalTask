@@ -8,13 +8,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ShopCartPage extends BasePage {
+
     @FindBy(xpath = "//span[contains(@data-bind,'subtotal')]")
     private WebElement productsSubtotal;
+
     @FindBy(css = ".minicart-items .product-item-name a")
     private List<WebElement> productsNamesList;
 
+    private Header header;
+
 
     private String removeProductFromCartIconXpathPattern = "//div[@class='product-item-details']//a[text ()='%s']/../..//a[@class='action delete']";
+
+    public Header getHeader() {
+        return new Header();
+    }
 
     public int getProductsSubtotal() {
         waitForElementVisible(productsSubtotal);

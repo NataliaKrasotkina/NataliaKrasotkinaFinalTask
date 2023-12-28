@@ -6,18 +6,30 @@ import org.openqa.selenium.support.FindBy;
 import java.util.List;
 
 public class ProductDetailsPage extends BasePage {
+
     @FindBy(xpath = "//a[@class='action towishlist']")
     private WebElement addToWishListLink;
+
     @FindBy(xpath = "//h1[@class ='page-title']")
     private WebElement productTitle;
+
     @FindBy(xpath = "//button[@title ='Add to Cart']")
     private WebElement addToCartButton;
+
     @FindBy(xpath = "//div[@class='product-info-price']//span[@class ='price-wrapper ']")
     private WebElement productPrice;
+
     @FindBy(xpath = "//div[@class='swatch-option text']")
     private List<WebElement> sizeList;
+
     @FindBy(xpath = "//div[@class='swatch-option color']")
     private List<WebElement> colorList;
+
+    private Header header;
+
+    public Header getHeader() {
+        return new Header();
+    }
 
     public void clickAddToWishListLink() {
         addToWishListLink.click();

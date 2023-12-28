@@ -13,6 +13,8 @@ import pages.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static pages.ClothesPage.*;
+
 @ExtendWith(MyTestWatcher.class)
 public class AddProductsToCartTest extends BaseTest {
     private List<String> productNames;
@@ -20,23 +22,18 @@ public class AddProductsToCartTest extends BaseTest {
     private final static String PASSWORD = "NK852456!NK";
     private final static String LOGIN = "nataliakrasotkina7@gmail.com";
 
-    private HomePage homePage;
     private LoginPage loginPage;
-    private WomenClothesPage womenPage;
-    private WomenTopsPage womenTopsPage;
+    private ClothesPage clothesPage;
     private ProductDetailsPage productDetailsPage;
     private ShopCartPage shopCartPage;
 
+
     @BeforeEach
     public void setUp() {
-        homePage = new HomePage();
         loginPage = new LoginPage();
-        womenPage = new WomenClothesPage();
         productDetailsPage = new ProductDetailsPage();
         productNames = new ArrayList<>();
-        womenTopsPage = new WomenTopsPage();
         shopCartPage = new ShopCartPage();
-
     }
 
     @AfterEach
@@ -49,8 +46,8 @@ public class AddProductsToCartTest extends BaseTest {
     @Test
     @Description("The test checks add products")
     public void addProductsToCartTest() {
-        loginToApp();
-        navigateToClothesPage();
+        homePage = loginPage.login(LOGIN, PASSWORD);
+        clothesPage = homePage.getHeader().selectCategory(WOMEN, TOPS, JACKETS);
         addProductToCart(1);
         addProductToCart(2);
         addProductToCart(3);
@@ -59,32 +56,21 @@ public class AddProductsToCartTest extends BaseTest {
 
     @Step("Validate Product Cart")
     private void validateProductCart() {
-        womenTopsPage.clickShopCartIcon();
+        homePage.getHeader().clickShopCartIcon();
         Assertions.assertEquals(subTotal, shopCartPage.getProductsSubtotal(), "Subtotal is not correct");
         Assertions.assertTrue(shopCartPage.getProductNames().containsAll(productNames), "list of added products is not correct");
     }
 
     @Step("Add Product To Cart")
     private void addProductToCart(int productIndex) {
-        womenTopsPage.clickProductByIndex(productIndex);
+        clothesPage.clickProductByIndex(productIndex);
         productNames.add(productDetailsPage.getProductTitle());
         subTotal = subTotal + productDetailsPage.getProductPrice();
         productDetailsPage.selectProductSizeByIndex(0);
         productDetailsPage.selectProductColourByIndex(0);
         productDetailsPage.clickAddToCartButton();
-        productDetailsPage.waitForProductsNumberIcon();
-        womenPage.clickWomenTopsLink();
-        productDetailsPage.waitForProductsNumberIcon();
-    }
-
-    @Step("Login To App")
-    public void loginToApp() {
-        loginPage.login(LOGIN, PASSWORD);
-    }
-
-    @Step("Navigate To Clothes Page")
-    private void navigateToClothesPage() {
-        homePage.clickWomanLink();
-        womenPage.clickWomenTopsLink();
+        productDetailsPage.getHeader().waitForProductsNumberIcon();
+        homePage.getHeader().selectCategory(WOMEN, TOPS, JACKETS);
+        productDetailsPage.getHeader().waitForProductsNumberIcon();
     }
 }

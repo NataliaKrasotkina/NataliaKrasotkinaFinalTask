@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.WebDriver;
+import pages.HomePage;
 
 import static com.github.automatedowl.tools.AllureEnvironmentWriter.allureEnvironmentWriter;
 
@@ -15,6 +16,8 @@ import static com.github.automatedowl.tools.AllureEnvironmentWriter.allureEnviro
 public class BaseTest {
     private static WebDriver driver;
     private final static String MAGENTO_URL = "https://magento.softwaretestingboard.com";
+
+    protected HomePage homePage;
 
     @BeforeAll
     public static void setAllureEnvironment() {
@@ -30,6 +33,7 @@ public class BaseTest {
     void setup() {
         driver = DriverManager.getInstance();
         driver.get(MAGENTO_URL);
+        homePage = new HomePage();
     }
 
     @AfterAll

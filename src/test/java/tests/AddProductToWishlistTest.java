@@ -10,24 +10,24 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import pages.*;
 
+import static pages.ClothesPage.*;
+
 @ExtendWith(MyTestWatcher.class)
 public class AddProductToWishlistTest extends BaseTest {
     private final static String PASSWORD = "NK852456!NK";
     private final static String LOGIN = "nataliakrasotkina7@gmail.com";
     private String productTitle;
 
-    private HomePage homePage;
     private LoginPage loginPage;
-    private WomenClothesPage womenPage;
+    private ClothesPage clothesPage;
     private ProductDetailsPage productDetailsPage;
     private MyWishListPage myWishListPage;
 
 
     @BeforeEach
     public void setUp() {
-        homePage = new HomePage();
         loginPage = new LoginPage();
-        womenPage = new WomenClothesPage();
+        clothesPage = new ClothesPage();
         productDetailsPage = new ProductDetailsPage();
         myWishListPage = new MyWishListPage();
     }
@@ -40,18 +40,13 @@ public class AddProductToWishlistTest extends BaseTest {
     @Test
     @Description("The test checks add product to wishlist")
     public void addProductToWishlistTest() {
-        loginToApp();
+        homePage = loginPage.login(LOGIN, PASSWORD);
+        clothesPage = homePage.getHeader().selectCategory(WOMEN, TOPS, JACKETS);
         navigateToWomenPage();
         navigateToProductDetailsPage();
         addProductToWishList();
         validateProductAddedToWishList();
     }
-
-    @Step("Login To App")
-    public void loginToApp() {
-        loginPage.login(LOGIN, PASSWORD);
-    }
-
     @Step("Navigate To Women Page")
     private void navigateToWomenPage() {
         homePage.clickWomanLink();
@@ -59,7 +54,7 @@ public class AddProductToWishlistTest extends BaseTest {
 
     @Step("Navigate To Product Details Page")
     private void navigateToProductDetailsPage() {
-        womenPage.clickProductByIndexIfExist(0);
+        clothesPage.clickProductByIndexIfExist(0);
         productTitle = productDetailsPage.getProductTitle();
     }
 

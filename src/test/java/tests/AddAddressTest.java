@@ -1,6 +1,7 @@
 package tests;
 
 import cofiguration.MyTestWatcher;
+import dto.Address;
 import io.qameta.allure.Description;
 import io.qameta.allure.Step;
 import org.junit.jupiter.api.AfterEach;
@@ -12,47 +13,38 @@ import pages.AddressBookPage;
 import pages.HomePage;
 import pages.LoginPage;
 import pages.MyAccountPage;
+import service.DataService;
 
 @ExtendWith(MyTestWatcher.class)
 public class AddAddressTest extends BaseTest {
+    private Address address;
     private final static String PASSWORD = "NK852456!NK";
     private final static String LOGIN = "nataliakrasotkina7@gmail.com";
-    private final static String STREET_ADDRESS = "Test Street 1";
-    private final static String CITY = "Test City 1";
-    private final static String ZIP_POSTAL_CODE = "12345";
-    private final static String PHONE_NUMBER = "+" + ((int) (Math.random() * 1000000000));
 
-    private HomePage homePage;
     private LoginPage loginPage;
     private MyAccountPage myAccountPage;
     private AddressBookPage addressBookPage;
 
-
     @BeforeEach
     public void setUp() {
-        homePage = new HomePage();
         loginPage = new LoginPage();
         myAccountPage = new MyAccountPage();
         addressBookPage = new AddressBookPage();
+        address = DataService.getAddress();
     }
 
     @AfterEach
     public void cleanUp() {
-        addressBookPage.deleteAddressRecord(PHONE_NUMBER);
+        addressBookPage.deleteAddress(address);
     }
 
     @Test
     @Description("The test checks add new address")
     public void addAddressTest() {
-        loginToApp();
+        homePage = loginPage.login(LOGIN, PASSWORD);
         navigateToMyAccount();
         addNewAddress();
         validateAddressAdded();
-    }
-
-    @Step("Login To App")
-    public void loginToApp() {
-        loginPage.login(LOGIN, PASSWORD);
     }
 
     @Step("Navigate To My Account")
@@ -65,16 +57,11 @@ public class AddAddressTest extends BaseTest {
     private void addNewAddress() {
         myAccountPage.clickAddressBookLink();
         addressBookPage.clickAddNewAddressButton();
-        addressBookPage.enterPhoneNumber(PHONE_NUMBER);
-        addressBookPage.enterStreetAddress(STREET_ADDRESS);
-        addressBookPage.enterCity(CITY);
-        addressBookPage.enterZipPostalCode(ZIP_POSTAL_CODE);
-        addressBookPage.selectCountry();
-        addressBookPage.clickSaveAddressButton();
+        addressBookPage.addAddress(address);
     }
 
     @Step("Validate Address Added")
     private void validateAddressAdded() {
-        Assertions.assertTrue(addressBookPage.isPhoneNumberDisplayed(PHONE_NUMBER), "Address is not added");
+        Assertions.assertTrue(addressBookPage.isAddressRecordDisplayed(address), "Address is not added");
     }
 }
