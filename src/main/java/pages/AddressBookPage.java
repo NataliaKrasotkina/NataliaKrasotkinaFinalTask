@@ -47,15 +47,15 @@ public class AddressBookPage extends BasePage {
         addNewAddressButton.click();
     }
 
-    public void enterPhoneNumber(String phoneNumber) {//TODO: rename enterPhoneNumber(String phoneNumber)
+    public void enterPhoneNumber(String phoneNumber) {
         phoneNumberField.sendKeys(phoneNumber);
     }
 
-    public void enterStreetAddress(String streetAddress) {//TODO: rename enterStreetAddress(String streetAddress)
+    public void enterStreetAddress(String streetAddress) {
         streetAddressField.sendKeys(streetAddress);
     }
 
-    public void enterCity(String city) {//TODO: rename enterCity(String city)
+    public void enterCity(String city) {
         cityField.sendKeys(city);
     }
 
